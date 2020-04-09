@@ -18,7 +18,7 @@ def render(pathlist, pdh):
 	ax = plotly.graph_objs.Scatter(name=p_name,
 	                               x=pdh.datetimes,
 	                               y=p_data,
-	                               line = {"width" : 1.5},
+	                               line = {"width" : 2.0},
 	                               mode='lines')
 	axes.append(ax)
 	

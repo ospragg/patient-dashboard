@@ -14,7 +14,7 @@ def render(pathlist, pdh):
 		ax = plotly.graph_objs.Scatter(name=p_name,
 		                               x=pdh.datetimes,
 		                               y=p_data,
-		                               line = {"width" : 2.0, "alpha" : 0.6},
+		                               line = {"width" : 2.0},
 		                               mode='lines',
 		                               hoverinfo="text",
 		                               text=["<a href=\"%s\">Patient %s</a>" % (p_name, p_name) for v in p_data])
