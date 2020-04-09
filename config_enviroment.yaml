@@ -1,0 +1,5 @@
+debug: true
+filename_google_creds: "data/credentials/patient-tracker-a176de3bd573.json"
+google_sheetname: "patient_data_example"
+filename_server_key: "data/server.key"
+filename_server_cert: "data/server.crt"
