@@ -2,6 +2,7 @@ import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+key_timestamp = "day"
 
 class PatientDataHandler:
 	
@@ -24,8 +25,8 @@ class PatientDataHandler:
 		
 		# get the timestamps
 		#self.datetimes = [datetime.datetime.strptime(el["datetime"], "%Y-%m-%d %H:%M") for el in sd]
-		self.datetimes = [el["day"] for el in sd]
+		self.datetimes = [el[key_timestamp] for el in sd]
 		
 		# get the patient data
-		self.readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != "datetime"}
+		self.readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
 		
