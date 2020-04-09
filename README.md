@@ -11,8 +11,10 @@
 	- cd patient-dashboard
 	- git remote set-url origin https://ospragg@github.com/ospragg/patient-dashboard.git
 	- pip3 install -r requirements.txt --user
-	- mkdir -p downloads/credentials
-	- nano downloads/credentials/aws.yaml
+	- mkdir -p data/credentials
+	- nano data/credentials/patient-tracker-a176de3bd573.json
+	- nano data/credentials/server.crt
+	- nano data/credentials/server.key
 
 - run tests:
 	- python3 -m unittest discover -v

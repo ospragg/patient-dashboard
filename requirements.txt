@@ -6,3 +6,4 @@ ruamel.yaml
 numpy
 numba
 pyopenssl
+pyyaml
