@@ -1,0 +1,8 @@
+requests
+plotly
+dash
+dash-auth
+ruamel.yaml
+numpy
+numba
+pyopenssl
