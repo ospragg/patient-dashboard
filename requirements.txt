@@ -7,3 +7,4 @@ numpy
 numba
 pyopenssl
 pyyaml
+gspread
