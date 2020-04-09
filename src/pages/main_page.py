@@ -6,8 +6,7 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
-	#print(pdh.datetimes)
-	#print(pdh.readings)
+	pdh.load_data()
 	
 	# set up the axes
 	axes = []

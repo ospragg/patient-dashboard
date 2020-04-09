@@ -6,6 +6,8 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
+	pdh.load_data()
+	
 	# error if patient doesn't exist
 	if pathlist[0] not in pdh.readings.keys():
 		return html.Div([ html.H3("Patient ID not recognised") ])
