@@ -28,7 +28,7 @@ with open("config_enviroment.yaml", "r") as f:
 # set up the patient data loader
 pdh = PatientDataHandler(c_e["filename_google_creds"],
                          c_e["google_sheetname"])
-pdh.load_data()
+#pdh.load_data()
 
 import plotly
 import dash
