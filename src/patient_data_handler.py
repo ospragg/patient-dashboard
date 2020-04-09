@@ -23,7 +23,8 @@ class PatientDataHandler:
 		"""
 		
 		# get the timestamps
-		self.datetimes = [datetime.datetime.strptime(el["datetime"], "%Y-%m-%d %H:%M") for el in sd]
+		#self.datetimes = [datetime.datetime.strptime(el["datetime"], "%Y-%m-%d %H:%M") for el in sd]
+		self.datetimes = [el["day"] for el in sd]
 		
 		# get the patient data
 		self.readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != "datetime"}
