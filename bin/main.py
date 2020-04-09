@@ -17,7 +17,7 @@ import yaml
 import pprint
 
 # set the src path
-sys.path.insert(0, "src")
+sys.path.insert(0, '.')
 
 from src.patient_data_handler import PatientDataHandler
 
