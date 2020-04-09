@@ -15,6 +15,12 @@
 	- nano data/credentials/patient-tracker-a176de3bd573.json
 	- nano data/credentials/server.crt
 	- nano data/credentials/server.key
+	- forward port sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8080
+		- iptables -t nat -L --line-numbers
+        	- list port forwarding with line numbers
+        - iptables -t nat -D PREROUTING 1
+        	- delete by line number
+        - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 - run tests:
 	- python3 -m unittest discover -v

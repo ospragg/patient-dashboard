@@ -13,7 +13,6 @@ def render(pathlist, pdh):
 	axes = []
 	for p_name, p_data in pdh.readings.items():
 		ax = plotly.graph_objs.Scatter(name=p_name,
-		                               #x=[i for i, _ in enumerate(pdh.datetimes)],
 		                               x=pdh.datetimes,
 		                               y=p_data,
 		                               line = {"width" : 1.5},
@@ -26,7 +25,9 @@ def render(pathlist, pdh):
 	fig = plotly.subplots.make_subplots(rows=1, cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False,)
-	fig.update_layout(hovermode="closest")
+	
+	title = plotly.graph_objs.layout.Title(text="All patients")
+	fig.update_layout(title=title)
 	
 	# add the axes to the figure
 	for ax in axes:

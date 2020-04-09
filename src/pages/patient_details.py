@@ -24,7 +24,9 @@ def render(pathlist, pdh):
 	fig = plotly.subplots.make_subplots(rows=1, cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False,)
-	#fig.update_layout(hovermode="closest")
+	
+	title = plotly.graph_objs.layout.Title(text="Patient: %s" % pathlist[0])
+	fig.update_layout(title=title)
 	
 	# add the axes to the figure
 	for ax in axes:
