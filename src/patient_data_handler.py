@@ -30,9 +30,10 @@ class PatientDataHandler:
 				metric = worksheet.title
 				days = [el[key_timestamp] for el in sd]
 				readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
-				self.sheets.append({"metric" : metric,
-				                   "days" : days,
-				                   "readings" : readings})
+				if metric not in set([el["metric"] for el in self.sheets]):
+					self.sheets.append({"metric" : metric,
+					                   "days" : days,
+					                   "readings" : readings})
 			except:
 				pass
 			i_worksheet += 1
