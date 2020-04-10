@@ -24,17 +24,14 @@ class PatientDataHandler:
 		i_worksheet = 0
 		self.sheets = []
 		while raw_sheets.get_worksheet(i_worksheet) != None:
-			try:
-				worksheet = raw_sheets.get_worksheet(i_worksheet)
-				sd = worksheet.get_all_records()
-				metric = worksheet.title
-				days = [el[key_timestamp] for el in sd]
-				readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
-				self.sheets.append({"metric" : metric,
-				                   "days" : days,
-				                   "readings" : readings})
-			except:
-				pass
+			worksheet = raw_sheets.get_worksheet(i_worksheet)
+			sd = worksheet.get_all_records()
+			metric = worksheet.title
+			days = [el[key_timestamp] for el in sd]
+			readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
+			self.sheets.append({"metric" : metric,
+			                   "days" : days,
+			                   "readings" : readings})
 			i_worksheet += 1
 		
 		"""
