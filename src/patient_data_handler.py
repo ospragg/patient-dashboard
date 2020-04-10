@@ -38,25 +38,3 @@ class PatientDataHandler:
 				pass
 			i_worksheet += 1
 		
-		print("got sheets: " + str([el["metric"] for el in self.sheets]))
-		
-		"""
-		[{'days': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  'metric': 'Sheet1',
-  'readings': {'Maggie': [24.3,
-                          48,
-                          32.53,
-                          35.67,
-                          43,
-                          41,
-                          '',
-                          '',
-                          '',
-                          '',
-                          '',
-                          '',
-                          '',
-                          ''],
-               'Ruby': [30.37,
-		"""
-		

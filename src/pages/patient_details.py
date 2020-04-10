@@ -6,13 +6,12 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
-	#pdh.load_data()
+	pdh.load_data()
 	
 	p_name = pathlist[0]
 	plots = [[] for i in range(len(pdh.sheets))]
 	for i_sheet, sheet in enumerate(pdh.sheets):
 		metric = sheet["metric"]
-		print(metric)
 		days = sheet["days"]
 		
 		if p_name in sheet["readings"]:
@@ -30,7 +29,6 @@ def render(pathlist, pdh):
 			                               showlegend=False,
 			                               textposition="middle center")
 				plots[i_sheet].append(ax)
-	print()
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots)+1, cols=1,
