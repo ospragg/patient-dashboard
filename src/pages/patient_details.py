@@ -8,35 +8,68 @@ def render(pathlist, pdh):
 	
 	pdh.load_data()
 	
-	# error if patient doesn't exist
-	if pathlist[0] not in pdh.readings.keys():
-		return html.Div([ html.H3("Patient ID not recognised") ])
-	
-	axes = []
 	p_name = pathlist[0]
-	p_data = pdh.readings[p_name]
-	ax = plotly.graph_objs.Scatter(name=p_name,
-	                               x=pdh.datetimes,
-	                               y=p_data,
-	                               line = {"width" : 2.0},
-	                               mode='lines')
-	axes.append(ax)
+	plots = [[] for i in range(len(pdh.sheets))]
+	for i_sheet, sheet in enumerate(pdh.sheets):
+		metric = sheet["metric"]
+		days = sheet["days"]
+		
+		if metric != "annotations":
+			if p_name in sheet["readings"]:
+				p_data = sheet["readings"][p_name]
+				temp_days = [a for a, b in zip(days, p_data) if b != ""]
+				temp_data = [a for a in p_data if a != ""]
+				ax = plotly.graph_objs.Scatter(name=p_name,
+			                               x=temp_days,
+			                               y=temp_data,
+			                               line = {"width" : 2.0},
+			                               mode='lines',
+			                               opacity=0.5,
+			                               showlegend=False,
+			                               textposition="middle center")
+				plots[i_sheet].append(ax)
+				i_bottom_time_axis = i_sheet
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=1, cols=1,
+	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
 	                                    shared_xaxes=True,
-	                                    shared_yaxes=False,)
+	                                    shared_yaxes=False)
 	
-	title = plotly.graph_objs.layout.Title(text="Patient: %s" % pathlist[0])
-	fig.update_layout(title=title)
+	for i_sheet, sheet in enumerate(pdh.sheets):
+		fig.update_yaxes(title_text=sheet["metric"], 
+		                 row=i_sheet+1, col=1)
+	fig.update_xaxes(title_text="Day", row=len(plots), col=1)
 	
-	# add the axes to the figure
-	for ax in axes:
-		fig.append_trace(ax, 1, 1)
+	# add the axes
+	for i_plot in range(len(plots)):
+		for i_ax in range(len(plots[i_plot])):
+			fig.append_trace(plots[i_plot][i_ax], i_plot+1, 1)
+	
+	annotations = []
+	"""
+	for i_sheet, sheet in enumerate(pdh.sheets):
+		metric = sheet["metric"]
+		days = sheet["days"]
+		
+		if metric == "annotations":
+			if p_name in sheet["readings"]:
+				p_data = sheet["readings"][p_name]
+				for a, b in zip(p_data, days):
+					if a != "":
+						annotations.append({text=a,
+						                   showarrow=True,
+						                   arrowhead=True,
+						                   xref="x",
+	                  	     				yref="y"})
+	"""
+	fig.update_layout(autosize=True,
+	                  height=800,
+	                  annotations=annotations)
 	
 	# set up the graph
-	graph = html.Div([dcc.Graph(figure=fig,
-	                 id='my-figure',
-	                 responsive=True)])
+	graph = html.Div([html.H1("%s" % pathlist[0]),
+	                 dcc.Graph(figure=fig,
+	                 			id='my-figure',
+	                			responsive=None)])
 	
 	return graph

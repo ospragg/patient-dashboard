@@ -10,6 +10,7 @@
 	- calling from webserver
 	- accessing Application Data
 	- not using API with App Engine or Compute Engine
+- https://docs.google.com/spreadsheets/d/1mU6EXbxUFodzeeg9ZjbfwV6RHZ2DpyS5YZQqhJhAk14/edit#gid=0
 """
 
 import sys
@@ -29,6 +30,7 @@ with open("config_enviroment.yaml", "r") as f:
 pdh = PatientDataHandler(c_e["filename_google_creds"],
                          c_e["google_sheetname"])
 #pdh.load_data()
+#quit()
 
 import plotly
 import dash
