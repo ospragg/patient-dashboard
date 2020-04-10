@@ -12,12 +12,14 @@ def render(pathlist, pdh):
 	plots = [[] for i in range(len(pdh.sheets))]
 	for i_sheet, sheet in enumerate(pdh.sheets):
 		metric = sheet["metric"]
+		print(metric)
 		days = sheet["days"]
 		
 		if p_name in sheet["readings"]:
 			p_data = sheet["readings"][p_name]
 			temp_days = [a for a, b in zip(days, p_data) if b != ""]
 			temp_data = [a for a in p_data if a != ""]
+			#if len(temp_data) > 0:
 			if metric != "annotations":
 				ax = plotly.graph_objs.Scatter(name=p_name,
 			                               x=temp_days,
@@ -28,6 +30,7 @@ def render(pathlist, pdh):
 			                               showlegend=False,
 			                               textposition="middle center")
 				plots[i_sheet].append(ax)
+	print()
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots)+1, cols=1,

@@ -73,8 +73,7 @@ if c_e["debug"] == True:
 else:
 	ssl_details = (c_e["filename_server_cert"],
 	               c_e["filename_server_key"])
-	server.run(#debug=c_e["debug"],
-	           debug=True,
+	server.run(debug=c_e["debug"],
 	           host="0.0.0.0",
 	           port=8080,
 	           ssl_context=ssl_details)
