@@ -6,7 +6,7 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
-	pdh.load_data()
+	#pdh.load_data()
 	
 	p_name = pathlist[0]
 	plots = [[] for i in range(len(pdh.sheets))]
@@ -14,11 +14,11 @@ def render(pathlist, pdh):
 		metric = sheet["metric"]
 		days = sheet["days"]
 		
-		if metric != "annotations":
-			if p_name in sheet["readings"]:
-				p_data = sheet["readings"][p_name]
-				temp_days = [a for a, b in zip(days, p_data) if b != ""]
-				temp_data = [a for a in p_data if a != ""]
+		if p_name in sheet["readings"]:
+			p_data = sheet["readings"][p_name]
+			temp_days = [a for a, b in zip(days, p_data) if b != ""]
+			temp_data = [a for a in p_data if a != ""]
+			if metric != "annotations":
 				ax = plotly.graph_objs.Scatter(name=p_name,
 			                               x=temp_days,
 			                               y=temp_data,
@@ -28,10 +28,9 @@ def render(pathlist, pdh):
 			                               showlegend=False,
 			                               textposition="middle center")
 				plots[i_sheet].append(ax)
-				i_bottom_time_axis = i_sheet
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
+	fig = plotly.subplots.make_subplots(rows=len(plots)+1, cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False)
 	
@@ -45,26 +44,8 @@ def render(pathlist, pdh):
 		for i_ax in range(len(plots[i_plot])):
 			fig.append_trace(plots[i_plot][i_ax], i_plot+1, 1)
 	
-	annotations = []
-	"""
-	for i_sheet, sheet in enumerate(pdh.sheets):
-		metric = sheet["metric"]
-		days = sheet["days"]
-		
-		if metric == "annotations":
-			if p_name in sheet["readings"]:
-				p_data = sheet["readings"][p_name]
-				for a, b in zip(p_data, days):
-					if a != "":
-						annotations.append({text=a,
-						                   showarrow=True,
-						                   arrowhead=True,
-						                   xref="x",
-	                  	     				yref="y"})
-	"""
 	fig.update_layout(autosize=True,
-	                  height=800,
-	                  annotations=annotations)
+	                  height=800)
 	
 	# set up the graph
 	graph = html.Div([html.H1("%s" % pathlist[0]),
