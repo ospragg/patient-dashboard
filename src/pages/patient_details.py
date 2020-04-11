@@ -3,6 +3,8 @@ import dash
 import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
+import textwrap
+
 
 def render(pathlist, pdh):
 	
@@ -38,7 +40,9 @@ def render(pathlist, pdh):
 	temp_y = [el for el in plot_sheets[0]["readings"][p_name] if el != ""]
 	ann_y = [max(temp_y) if len(temp_y) > 0 else 0.0 for el in ann_x]
 	ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"][p_name]
-	annotations = [{"x":x,"y":y,"xref":"x","yref":"y","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-20} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
+	ann_text = ["<br>".join(textwrap.wrap(el, 12, break_long_words=False)) for el in ann_text]
+	#annotations = [{"x":x,"y":y,"xref":"x","yref":"y","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-20} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
+	annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-60,"bordercolor":'black',"align":'left',} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
