@@ -67,6 +67,7 @@ def display_page(pathname):
 		return html.Div([html.H3("Error")])
 	return None
 
+
 # set up the server
 if c_e["debug"] == True:
 	server.run(debug=c_e["debug"])

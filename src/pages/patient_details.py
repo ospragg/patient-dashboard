@@ -25,12 +25,20 @@ def render(pathlist, pdh):
 			ax = plotly.graph_objs.Scatter(name=p_name,
 		                               x=temp_days,
 		                               y=temp_data,
-		                               line = {"width" : 2.0},
-		                               mode='lines',
-		                               opacity=0.5,
+		                               line = {"width" : 1.0},
+		                               #mode='lines',
+									   mode="lines+markers",
+		                               opacity=0.8,
 		                               showlegend=False,
 		                               textposition="middle center")
 			plots[i_sheet].append(ax)
+	
+	# set up the annotations
+	ann_x = plot_sheets[0]["days"]
+	temp_y = [el for el in plot_sheets[0]["readings"][p_name] if el != ""]
+	ann_y = [max(temp_y) if len(temp_y) > 0 else 0.0 for el in ann_x]
+	ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"][p_name]
+	annotations = [{"x":x,"y":y,"xref":"x","yref":"y","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-20} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
@@ -41,7 +49,7 @@ def render(pathlist, pdh):
 	for i_sheet, sheet in enumerate(plot_sheets):
 		fig.update_yaxes(title_text=sheet["metric"], 
 		                 row=i_sheet+1, col=1)
-	fig.update_xaxes(title_text="Day", row=len(plots), col=1)
+	fig.update_xaxes(title_text="Day", row=len(plots), col=1, rangemode='tozero')
 	
 	# add the axes
 	for i_plot in range(len(plots)):
@@ -50,7 +58,8 @@ def render(pathlist, pdh):
 	
 	# set the plot height
 	fig.update_layout(autosize=True,
-	                  height=600)
+	                  height=150 * len(plots),
+	                  annotations=annotations)
 	
 	# set up the graph
 	graph = html.Div([html.H1("%s" % pathlist[0]),
