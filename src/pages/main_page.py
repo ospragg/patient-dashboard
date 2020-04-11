@@ -6,36 +6,51 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
+	# get the latest sheets
 	sheets = pdh.get_sheets()
 	
-	plots = [[] for i in range(len(sheets[0:1]))]
-	for i_sheet, sheet in enumerate(sheets[0:1]):
+	# get the plots we want to make (just the first one, no annotations)
+	plot_sheets = [el for el in sheets if el["metric"] != "annotations"][0:1]
+	
+	# generate the plots
+	plots = [[] for i in range(len(plot_sheets))]
+	for i_sheet, sheet in enumerate(plot_sheets):
 		metric = sheet["metric"]
 		days = sheet["days"]
 		for p_name, p_data in sheet["readings"].items():
 			temp_days = [a for a, b in zip(days, p_data) if b != ""]
 			temp_data = [a for a in p_data if a != ""]
+			plot_link_str = "<a href=\"%s\">%s</a>"
+			plot_links = [plot_link_str % (p_name, p_name) for v in p_data]
 			ax = plotly.graph_objs.Scatter(name=p_name,
-		                               x=temp_days,
-		                               y=temp_data,
-		                               line = {"width" : 2.0},
-		                               mode='lines',
-		                               hoverinfo="text",
-		                               text=["<a href=\"%s\">%s</a>" % (p_name, p_name) for v in p_data],
-		                               opacity=0.5,
-		                               showlegend=True,
-		                               textposition="middle center")
+									   x=temp_days,
+									   y=temp_data,
+									   line = {"width" : 2.0},
+									   mode='lines',
+									   hoverinfo="text",
+									   text=plot_links,
+									   opacity=0.5,
+									   showlegend=True,
+									   )
 			plots[i_sheet].append(ax)
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=1, cols=1,
-	                                    shared_xaxes=True,
-	                                    shared_yaxes=False,)
+										shared_xaxes=True,
+										shared_yaxes=False,)
 	
-	for i_sheet, sheet in enumerate(sheets[0:1]):
+	fig.update_layout(
+		hoverlabel=dict(
+			bgcolor="white", 
+			font_size=16, 
+			font_family="Rockwell"
+		),
+		hovermode='closest'
+	)
+	
+	# add x and y axis labels
+	for i_sheet, sheet in enumerate(plot_sheets):
 		fig.update_yaxes(title_text=sheet["metric"], row=i_sheet+1, col=1)
-	
-	#fig.update_xaxes(title_text="Day", row=i_sheet+1, col=1)
 	fig.update_xaxes(title_text="Day", row=1, col=1)
 	
 	# add the axes
@@ -45,9 +60,9 @@ def render(pathlist, pdh):
 	
 	# set up the graph
 	graph = html.Div([html.H1("All patients"),
-	                 dcc.Graph(figure=fig,
-	                 			id='my-figure',
-	                			responsive=None)])
+					 dcc.Graph(figure=fig,
+								id='my-figure',
+								responsive=None)])
 	
 	return graph
 

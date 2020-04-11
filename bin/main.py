@@ -29,20 +29,8 @@ with open("config_enviroment.yaml", "r") as f:
 # set up the patient data loader
 pdh = PatientDataHandler(c_e["filename_google_creds"],
                          c_e["google_sheetname"])
-#pdh.load_data()
-
 pdh.start_load_data_deamon()
 
-"""
-import time
-
-while 1:
-	
-	print("got sheets: %s" % str([el["metric"] for el in pdh.get_sheets()]))
-	time.sleep(7)
-
-quit()
-"""
 
 import plotly
 import dash

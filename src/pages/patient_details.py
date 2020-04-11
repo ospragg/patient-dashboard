@@ -6,16 +6,18 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
+	# get the latest sheets
 	sheets = pdh.get_sheets()
 	
+	# get the plots we want to make (no annotations)
 	plot_sheets = [el for el in sheets if el["metric"] != "annotations"]
 	
+	# generate the plots
 	p_name = pathlist[0]
 	plots = [[] for i in range(len(plot_sheets))]
 	for i_sheet, sheet in enumerate(plot_sheets):
 		metric = sheet["metric"]
 		days = sheet["days"]
-		
 		if p_name in sheet["readings"]:
 			p_data = sheet["readings"][p_name]
 			temp_days = [a for a, b in zip(days, p_data) if b != ""]
@@ -35,6 +37,7 @@ def render(pathlist, pdh):
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False)
 	
+	# add x and y axis labels
 	for i_sheet, sheet in enumerate(plot_sheets):
 		fig.update_yaxes(title_text=sheet["metric"], 
 		                 row=i_sheet+1, col=1)
@@ -45,8 +48,9 @@ def render(pathlist, pdh):
 		for i_ax in range(len(plots[i_plot])):
 			fig.append_trace(plots[i_plot][i_ax], i_plot+1, 1)
 	
+	# set the plot height
 	fig.update_layout(autosize=True,
-	                  height=800)
+	                  height=600)
 	
 	# set up the graph
 	graph = html.Div([html.H1("%s" % pathlist[0]),

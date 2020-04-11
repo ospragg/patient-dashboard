@@ -6,9 +6,41 @@ import time
 from threading import Thread
 import copy
 from oauth2client.service_account import ServiceAccountCredentials
+import yaml
 
 key_timestamp = "day"
 dt_update = 60.0
+
+# load the configuration
+with open("config_enviroment.yaml", "r") as f:
+	c_e = yaml.load(f, Loader=yaml.FullLoader)
+
+
+def load_data(filename_google_creds, sheetname):
+	
+	# use creds to create a client to interact with the Google Drive API
+	google_url = 'https://www.googleapis.com/auth/drive'
+	creds = ServiceAccountCredentials.from_json_keyfile_name(filename_google_creds,
+	                                                         google_url)
+	client = gspread.authorize(creds)
+	raw_sheets = client.open(sheetname)
+	
+	# make a list of worksheets
+	sheets = []
+	worksheet = 0
+	i_worksheet = 0
+	while worksheet != None:
+		worksheet = raw_sheets.get_worksheet(i_worksheet)
+		if worksheet != None:
+			sd = worksheet.get_all_records()
+			metric = worksheet.title
+			days = [el[key_timestamp] for el in sd]
+			readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
+			sheet = {"metric" : metric, "days" : days, "readings" : readings}
+			sheets.append(copy.deepcopy(sheet))
+		i_worksheet += 1
+	
+	return sheets
 
 class PatientDataHandler:
 	
@@ -21,34 +53,21 @@ class PatientDataHandler:
 	def load_data(self):
 		
 		while 1:
+			if c_e["debug"] == False:
+				self.writing_to_sheets = True
+				try:
+					self.sheets = load_data(self.filename_google_creds,
+					                        self.sheetname)
+				except Exception as e:
+					self.sheets = []
+					print("failed to load data with exception:\n%s" % str(e))
+				self.writing_to_sheets = False
+			else:
+				with open("data/example_patient_data.pkl", "rb") as f:
+					self.sheets = pickle.loads(f.read())
 			
-			self.writing_to_sheets = True
-			try:
-				
-				# use creds to create a client to interact with the Google Drive API
-				creds = ServiceAccountCredentials.from_json_keyfile_name(self.filename_google_creds,
-				                                                         'https://www.googleapis.com/auth/drive')
-				client = gspread.authorize(creds)
-				raw_sheets = client.open(self.sheetname)
-				
-				# make a list of worksheets
-				i_worksheet = 0
-				self.sheets = []
-				worksheet = 0
-				while worksheet != None:
-					worksheet = raw_sheets.get_worksheet(i_worksheet)
-					if worksheet != None:
-						sd = worksheet.get_all_records()
-						metric = worksheet.title
-						days = [el[key_timestamp] for el in sd]
-						readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
-						sheet = {"metric" : metric, "days" : days, "readings" : readings}
-						self.sheets.append(copy.deepcopy(sheet))
-					i_worksheet += 1
-				
-			except Exception as e:
-				print("failed to load data with exception:\n%s" % str(e))
-			self.writing_to_sheets = False
+			with open("data/example_patient_data.pkl", "wb") as f:
+				f.write(pickle.dumps(self.sheets))
 			
 			time.sleep(dt_update)
 	

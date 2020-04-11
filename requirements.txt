@@ -10,3 +10,4 @@ pyyaml
 gspread
 oauth2client
 pprint
+ipywidgets
