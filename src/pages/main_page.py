@@ -6,10 +6,10 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
-	pdh.load_data()
+	sheets = pdh.get_sheets()
 	
-	plots = [[] for i in range(len(pdh.sheets[0:1]))]
-	for i_sheet, sheet in enumerate(pdh.sheets[0:1]):
+	plots = [[] for i in range(len(sheets[0:1]))]
+	for i_sheet, sheet in enumerate(sheets[0:1]):
 		metric = sheet["metric"]
 		days = sheet["days"]
 		for p_name, p_data in sheet["readings"].items():
@@ -28,14 +28,15 @@ def render(pathlist, pdh):
 			plots[i_sheet].append(ax)
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
+	fig = plotly.subplots.make_subplots(rows=1, cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False,)
 	
-	for i_sheet, sheet in enumerate(pdh.sheets[0:1]):
+	for i_sheet, sheet in enumerate(sheets[0:1]):
 		fig.update_yaxes(title_text=sheet["metric"], row=i_sheet+1, col=1)
 	
-	fig.update_xaxes(title_text="Day", row=i_sheet+1, col=1)
+	#fig.update_xaxes(title_text="Day", row=i_sheet+1, col=1)
+	fig.update_xaxes(title_text="Day", row=1, col=1)
 	
 	# add the axes
 	for i_plot in range(len(plots)):

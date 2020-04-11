@@ -6,11 +6,13 @@ import dash_html_components as html
 
 def render(pathlist, pdh):
 	
-	pdh.load_data()
+	sheets = pdh.get_sheets()
+	
+	plot_sheets = [el for el in sheets if el["metric"] != "annotations"]
 	
 	p_name = pathlist[0]
-	plots = [[] for i in range(len(pdh.sheets))]
-	for i_sheet, sheet in enumerate(pdh.sheets):
+	plots = [[] for i in range(len(plot_sheets))]
+	for i_sheet, sheet in enumerate(plot_sheets):
 		metric = sheet["metric"]
 		days = sheet["days"]
 		
@@ -18,24 +20,22 @@ def render(pathlist, pdh):
 			p_data = sheet["readings"][p_name]
 			temp_days = [a for a, b in zip(days, p_data) if b != ""]
 			temp_data = [a for a in p_data if a != ""]
-			#if len(temp_data) > 0:
-			if metric != "annotations":
-				ax = plotly.graph_objs.Scatter(name=p_name,
-			                               x=temp_days,
-			                               y=temp_data,
-			                               line = {"width" : 2.0},
-			                               mode='lines',
-			                               opacity=0.5,
-			                               showlegend=False,
-			                               textposition="middle center")
-				plots[i_sheet].append(ax)
+			ax = plotly.graph_objs.Scatter(name=p_name,
+		                               x=temp_days,
+		                               y=temp_data,
+		                               line = {"width" : 2.0},
+		                               mode='lines',
+		                               opacity=0.5,
+		                               showlegend=False,
+		                               textposition="middle center")
+			plots[i_sheet].append(ax)
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=len(plots)+1, cols=1,
+	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False)
 	
-	for i_sheet, sheet in enumerate(pdh.sheets):
+	for i_sheet, sheet in enumerate(plot_sheets):
 		fig.update_yaxes(title_text=sheet["metric"], 
 		                 row=i_sheet+1, col=1)
 	fig.update_xaxes(title_text="Day", row=len(plots), col=1)
