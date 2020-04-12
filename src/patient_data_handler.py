@@ -9,7 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import yaml
 
 key_timestamp = "day"
-dt_update = 60.0
+dt_update = 5.0 * 60.0
 
 # load the configuration
 with open("config_enviroment.yaml", "r") as f:
@@ -39,6 +39,7 @@ def load_data(filename_google_creds, sheetname):
 			sheet = {"metric" : metric, "days" : days, "readings" : readings}
 			sheets.append(copy.deepcopy(sheet))
 		i_worksheet += 1
+		time.sleep(1.0)
 	
 	return sheets
 
