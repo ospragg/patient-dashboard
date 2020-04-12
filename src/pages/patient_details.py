@@ -41,13 +41,13 @@ def render(pathlist, pdh):
 	ann_y = [max(temp_y) if len(temp_y) > 0 else 0.0 for el in ann_x]
 	ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"][p_name]
 	ann_text = ["<br>".join(textwrap.wrap(el, 12, break_long_words=False)) for el in ann_text]
-	#annotations = [{"x":x,"y":y,"xref":"x","yref":"y","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-20} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
 	annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-60,"bordercolor":'black',"align":'left',} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
 	                                    shared_xaxes=True,
-	                                    shared_yaxes=False)
+	                                    shared_yaxes=False,
+	                                    vertical_spacing=0.02)
 	
 	# add x and y axis labels
 	for i_sheet, sheet in enumerate(plot_sheets):
@@ -62,13 +62,15 @@ def render(pathlist, pdh):
 	
 	# set the plot height
 	fig.update_layout(autosize=True,
-	                  height=150 * len(plots),
+	                  #height=150 * len(plots),
+	                  height=120 * len(plots),
 	                  annotations=annotations)
 	
 	# set up the graph
 	graph = html.Div([html.H1("%s" % pathlist[0]),
 	                 dcc.Graph(figure=fig,
 	                 			id='my-figure',
+	                 			config={"displayModeBar":False},
 	                			responsive=None)])
 	
 	return graph

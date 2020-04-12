@@ -69,6 +69,7 @@ def render(pathlist, pdh):
 	graph = html.Div([html.H1("All patients"),
 					 dcc.Graph(figure=fig,
 								id='my-figure',
+								config={"displayModeBar":False},
 								responsive=None)])
 	
 	return graph
