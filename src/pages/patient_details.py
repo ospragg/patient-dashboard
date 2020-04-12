@@ -41,7 +41,9 @@ def render(pathlist, pdh):
 	ann_y = [max(temp_y) if len(temp_y) > 0 else 0.0 for el in ann_x]
 	ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"][p_name]
 	ann_text = ["<br>".join(textwrap.wrap(el, 12, break_long_words=False)) for el in ann_text]
-	annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":7,"ax":0,"ay":-60,"bordercolor":'black',"align":'left',} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
+	ann_yanchor = ["bottom" if i % 2 == 0 else "top" for i in range(len(ann_text))]
+	annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":1,"ax":0,"ay":-80,"bordercolor":'black',"align":'left',"valign":'bottom',"yanchor":"top","font":{"size":10}} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
+	# https://plotly.com/python/reference/#layout-annotations-items-annotation-align
 	
 	# set up the figure
 	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
