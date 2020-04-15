@@ -55,17 +55,19 @@ class PatientDataHandler:
 		
 		while 1:
 			if c_e["debug"] == False:
-				self.writing_to_sheets = True
 				try:
-					self.sheets = load_data(self.filename_google_creds,
-					                        self.sheetname)
+					new_sheets = load_data(self.filename_google_creds,
+					                       self.sheetname)
 				except Exception as e:
 					self.sheets = []
 					print("failed to load data with exception:\n%s" % str(e))
-				self.writing_to_sheets = False
 			else:
 				with open("data/example_patient_data.pkl", "rb") as f:
-					self.sheets = pickle.loads(f.read())
+					new_sheets = pickle.loads(f.read())
+			
+			self.writing_to_sheets = True
+			self.sheets = copy.deepcopy(new_sheets)
+			self.writing_to_sheets = False
 			
 			with open("data/example_patient_data.pkl", "wb") as f:
 				f.write(pickle.dumps(self.sheets))
@@ -80,7 +82,8 @@ class PatientDataHandler:
 		while self.sheets == None:
 			while self.writing_to_sheets == True:
 				time.sleep(0.1)
-		return copy.deepcopy(self.sheets)
+		#return copy.deepcopy(self.sheets)
+		return self.sheets
 
 
 

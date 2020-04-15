@@ -35,6 +35,7 @@ def render(pathlist, pdh):
 									   #text=plot_links,
 									   opacity=0.8,
 									   showlegend=True,
+									   #line_shape='spline',
 									   )
 			plots[i_sheet].append(ax)
 	
