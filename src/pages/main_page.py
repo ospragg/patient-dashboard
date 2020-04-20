@@ -1,13 +1,25 @@
+import pickle
+import yaml
 import plotly
 import dash
 import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
+import os
 
-def render(pathlist, pdh):
+def render(base_url, pathlist):
+	
+	# load the configuration
+	with open("config_enviroment.yaml", "r") as f:
+		c_e = yaml.load(f, Loader=yaml.FullLoader)
 	
 	# get the latest sheets
-	sheets = pdh.get_sheets()
+	filename_sheet_data = "%s/%s.pkl" % (c_e["path_sheet_data"], pathlist[0])
+	if os.path.exists(filename_sheet_data):
+		with open(filename_sheet_data, "rb") as f:
+			sheets = pickle.loads(f.read())
+	else:
+		return html.H1("Error: sheet '%s' not found" % pathlist[0])
 	
 	# get the plots we want to make (just the first one, no annotations)
 	plot_sheets = [el for el in sheets if el["metric"] != "annotations"][0:1]
@@ -21,7 +33,7 @@ def render(pathlist, pdh):
 		for p_name, p_data in sheet["readings"].items():
 			temp_days = [a for a, b in zip(days, p_data) if b != ""]
 			temp_data = [a for a in p_data if a != ""]
-			plot_link_str = "<a href=\"%s\"> </a>" % p_name
+			plot_link_str = "<a href=\"%s/%s/%s\"> </a>" % (base_url, pathlist[0], p_name)
 			plot_links = [plot_link_str for v in p_data]
 			all_plot_links.extend([{"x":x,"y":y,"link":l} for x,y,l in zip(temp_days,temp_data,plot_links)])
 			ax = plotly.graph_objs.Scatter(name=p_name,

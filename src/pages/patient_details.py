@@ -1,23 +1,34 @@
-import pprint
-
+import pickle
+import yaml
 import plotly
 import dash
 import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 import textwrap
+import os
 
 
-def render(pathlist, pdh):
+def render(pathlist):
+	
+	# load the configuration
+	with open("config_enviroment.yaml", "r") as f:
+		c_e = yaml.load(f, Loader=yaml.FullLoader)
 	
 	# get the latest sheets
-	sheets = pdh.get_sheets()
+	filename_sheet_data = "%s/%s.pkl" % (c_e["path_sheet_data"], pathlist[0])
+	if os.path.exists(filename_sheet_data):
+		with open(filename_sheet_data, "rb") as f:
+			sheets = pickle.loads(f.read())
+	else:
+		return html.H1("Error: sheet '%s' not found" % pathlist[0])
 	
 	# get the plots we want to make (no annotations)
 	plot_sheets = [el for el in sheets if el["metric"] != "annotations"]
 	
 	# generate the plots
-	p_name = pathlist[0]
+	#p_name = pathlist[0]
+	p_name = pathlist[1]
 	plots = [[] for i in range(len(plot_sheets))]
 	for i_sheet, sheet in enumerate(plot_sheets):
 		metric = sheet["metric"]
@@ -75,7 +86,7 @@ def render(pathlist, pdh):
 	                  annotations=annotations)
 	
 	# set up the graph
-	graph = html.Div([html.H1("%s" % pathlist[0]),
+	graph = html.Div([html.H1("%s" % p_name),
 	                 dcc.Graph(figure=fig,
 	                 			id='my-figure',
 	                 			config={"displayModeBar":False},

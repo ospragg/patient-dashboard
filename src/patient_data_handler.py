@@ -16,7 +16,7 @@ with open("config_enviroment.yaml", "r") as f:
 	c_e = yaml.load(f, Loader=yaml.FullLoader)
 
 
-def load_data(filename_google_creds, sheetname):
+def load_data(filename_google_creds, sheetname, t_sleep=2.0):
 	
 	# use creds to create a client to interact with the Google Drive API
 	google_url = 'https://www.googleapis.com/auth/drive'
@@ -31,6 +31,7 @@ def load_data(filename_google_creds, sheetname):
 	i_worksheet = 0
 	while worksheet != None:
 		worksheet = raw_sheets.get_worksheet(i_worksheet)
+		time.sleep(t_sleep)
 		if worksheet != None:
 			sd = worksheet.get_all_records()
 			metric = worksheet.title
@@ -39,7 +40,7 @@ def load_data(filename_google_creds, sheetname):
 			sheet = {"metric" : metric, "days" : days, "readings" : readings}
 			sheets.append(copy.deepcopy(sheet))
 		i_worksheet += 1
-		time.sleep(1.0)
+		time.sleep(t_sleep)
 	
 	return sheets
 
@@ -82,7 +83,6 @@ class PatientDataHandler:
 		while self.sheets == None:
 			while self.writing_to_sheets == True:
 				time.sleep(0.1)
-		#return copy.deepcopy(self.sheets)
 		return self.sheets
 
 
