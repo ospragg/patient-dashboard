@@ -11,3 +11,5 @@ gspread
 oauth2client
 pprint
 ipywidgets
+apiclient
+google-api-python-client
