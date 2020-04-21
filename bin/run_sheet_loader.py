@@ -33,6 +33,8 @@ import src.helper_functions as hf
 with open("config_enviroment.yaml", "r") as f:
 	c_e = yaml.load(f, Loader=yaml.FullLoader)
 
+t_sleep = 5.0
+
 # infinite loop
 while 1:
 	
@@ -59,14 +61,14 @@ while 1:
 	
 	print("got sheet names: %s" % str(sheet_names))
 	
-	time.sleep(2.0)
+	time.sleep(t_sleep)
 	
 	# process the sheets
 	for sheet_name in sheet_names:
 		try:
 			
 			# load some sheet data
-			sheet_data = pdh.load_data(c_e["filename_google_creds"], sheet_name, t_sleep=2.0)
+			sheet_data = pdh.load_data(c_e["filename_google_creds"], sheet_name, t_sleep=t_sleep)
 			
 			# write the sheet data
 			with open("%s/%s.pkl" % (c_e["path_sheet_data"], sheet_name), "wb") as f:
@@ -75,7 +77,7 @@ while 1:
 		except Exception as e:
 			print("failed to process sheet %s with error:\n%s" % (sheet_name, str(e)))
 		
-		time.sleep(2.0)
+		time.sleep(t_sleep)
 	
-	time.sleep(5.0)
+	time.sleep(30.0)
 
