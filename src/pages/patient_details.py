@@ -52,13 +52,16 @@ def render(pathlist):
 	ann_x = plot_sheets[0]["days"]
 	temp_y = [el for el in plot_sheets[0]["readings"][p_name] if el != ""]
 	ann_y = [max(temp_y) if len(temp_y) > 0 else 0.0 for el in ann_x]
-	temp_ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"]
-	if p_name in temp_ann_text:
-		ann_text = temp_ann_text[p_name]
-		ann_text = ["<br>".join(textwrap.wrap(el, 12, break_long_words=False)) for el in ann_text]
-		ann_yanchor = ["bottom" if i % 2 == 0 else "top" for i in range(len(ann_text))]
-		annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":1,"ax":0,"ay":-80,"bordercolor":'black',"align":'left',"valign":'bottom',"yanchor":"top","font":{"size":10}} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
-		# https://plotly.com/python/reference/#layout-annotations-items-annotation-align
+	if len([el for el in sheets if el["metric"] == "annotations"]) > 0:
+		temp_ann_text = [el for el in sheets if el["metric"] == "annotations"][0]["readings"]
+		if p_name in temp_ann_text:
+			ann_text = temp_ann_text[p_name]
+			ann_text = ["<br>".join(textwrap.wrap(el, 12, break_long_words=False)) for el in ann_text]
+			ann_yanchor = ["bottom" if i % 2 == 0 else "top" for i in range(len(ann_text))]
+			annotations = [{"x":x,"y":1.0,"xref":"x","yref":"paper","text":t,"showarrow":True,"arrowhead":1,"ax":0,"ay":-80,"bordercolor":'black',"align":'left',"valign":'bottom',"yanchor":"top","font":{"size":10}} for x,y,t in zip(ann_x,ann_y,ann_text) if t != ""]
+			# https://plotly.com/python/reference/#layout-annotations-items-annotation-align
+		else:
+			annotations = []
 	else:
 		annotations = []
 	

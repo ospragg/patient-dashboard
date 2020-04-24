@@ -47,7 +47,7 @@ def render(base_url, pathlist):
 									   #text=plot_links,
 									   opacity=0.8,
 									   showlegend=True,
-									   line_shape='spline',
+									   #line_shape='spline',
 									   )
 			plots[i_sheet].append(ax)
 	
