@@ -34,7 +34,7 @@ def load_data(filename_google_creds, sheetname, t_sleep=2.0):
 		time.sleep(t_sleep)
 		if worksheet != None:
 			sd = worksheet.get_all_records()
-			if all([key_timestamp in el for el in sd]):
+			if len(sd) > 0 and all([key_timestamp in el for el in sd]):
 				metric = worksheet.title
 				days = [el[key_timestamp] for el in sd]
 				readings = {k : [el[k] for el in sd] for k in sd[0].keys() if k != key_timestamp}
