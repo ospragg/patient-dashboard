@@ -55,6 +55,7 @@ val = "href"
 def display_page(pathname):
 	# direct the request based on the path
 	pathlist = [el for el in pathname.split("/")[3:] if el != ""]
+	print(pathlist)
 	base_url = "/".join(pathname.split("/")[:3])
 	
 	if len(pathlist) == 1:
