@@ -1,6 +1,7 @@
 import pickle
 import yaml
-import plotly
+#import plotly
+from plotly import plotly
 import dash
 import dash_auth
 import dash_core_components as dcc
