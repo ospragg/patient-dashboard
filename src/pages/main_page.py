@@ -1,7 +1,6 @@
 import pickle
 import yaml
 import plotly
-#import plotly.plotly as plotly
 from plotly import subplots
 import dash
 import dash_auth

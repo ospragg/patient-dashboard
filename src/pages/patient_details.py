@@ -1,6 +1,7 @@
 import pickle
 import yaml
 import plotly
+from plotly import subplots
 import dash
 import dash_auth
 import dash_core_components as dcc
@@ -66,7 +67,7 @@ def render(pathlist):
 		annotations = []
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=len(plots), cols=1,
+	fig = subplots.make_subplots(rows=len(plots), cols=1,
 	                                    shared_xaxes=True,
 	                                    shared_yaxes=False,
 	                                    vertical_spacing=0.02)
