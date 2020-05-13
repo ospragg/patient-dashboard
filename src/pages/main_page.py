@@ -2,6 +2,7 @@ import pickle
 import yaml
 import plotly
 #import plotly.plotly as plotly
+from plotly import subplots
 import dash
 import dash_auth
 import dash_core_components as dcc
@@ -53,7 +54,7 @@ def render(base_url, pathlist):
 			plots[i_sheet].append(ax)
 	
 	# set up the figure
-	fig = plotly.subplots.make_subplots(rows=1, cols=1,
+	fig = subplots.make_subplots(rows=1, cols=1,
 										shared_xaxes=True,
 										shared_yaxes=False,)
 	
